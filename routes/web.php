@@ -7,6 +7,9 @@ Route::get('/', function () {
 });
 
 // Auth
+Route::get('/register-operator', function () {
+    return view('auth.register-operator');
+});
 Route::get('/login', function () {
     return view('auth.login');
 });
@@ -15,6 +18,10 @@ Route::get('/forgot-password', function () {
 });
 
 // Form Manifest
+Route::get('/checkin-manifest', function () {
+    return view('checkin-manifest');
+});
+
 Route::get('/manifest-pelayaran', function () {
     return view('manifest-pelayaran');
 });
