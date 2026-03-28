@@ -72,4 +72,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('manifest', ManifestController::class);
         Route::resource('pelaporan-kapal', PelaporanKapalController::class);
     });
+
+
+ 
 });

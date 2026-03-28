@@ -4,9 +4,9 @@
 @section('breadcrumb', 'Data Profiling Kapal')
 
 @section('page_actions')
-    <a href="{{ route('operator.profiling.create') }}" class="btn btn-primary">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProfilingModal">
         <i class="bi bi-plus-lg me-1"></i> Tambah Data
-    </a>
+    </button>
 @endsection
 
 @section('content')
@@ -45,11 +45,19 @@
                                             <i class="bi bi-eye"></i>
                                         </a>
 
-                                        <a href="{{ route('operator.profiling.edit', $item->id) }}"
-                                           class="btn btn-warning btn-sm table-action-btn"
-                                           title="Edit">
+                                        <button type="button"
+                                                class="btn btn-warning btn-sm table-action-btn btn-edit-profiling"
+                                                title="Edit"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editProfilingModal"
+                                                data-id="{{ $item->id }}"
+                                                data-nama_kapal="{{ $item->nama_kapal }}"
+                                                data-asal_keberangkatan="{{ $item->asal_keberangkatan }}"
+                                                data-tujuan_keberangkatan="{{ $item->tujuan_keberangkatan }}"
+                                                data-waktu_keberangkatan="{{ \Carbon\Carbon::parse($item->waktu_keberangkatan)->format('Y-m-d\TH:i') }}"
+                                                data-kapasitas_penumpang="{{ $item->kapasitas_penumpang }}">
                                             <i class="bi bi-pencil-square"></i>
-                                        </a>
+                                        </button>
 
                                         <form action="{{ route('operator.profiling.destroy', $item->id) }}"
                                               method="POST"
@@ -79,7 +87,71 @@
         </div>
     </div>
 </div>
+
+@include('operator.profiling.partials.create-modal')
+@include('operator.profiling.partials.edit-modal')
 @endsection
+
+@push('styles')
+<style>
+    .profiling-modal-content {
+        border: 0;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
+    }
+
+    .profiling-modal-header {
+        padding: 1rem 1.2rem;
+        border-bottom: 1px solid #e9eef5;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    }
+
+    .profiling-modal-body {
+        padding: 1.2rem;
+        background: #ffffff;
+    }
+
+    .profiling-modal-footer {
+        padding: 1rem 1.2rem;
+        border-top: 1px solid #e9eef5;
+        background: #fff;
+    }
+
+    .profiling-modal-body .form-label {
+        font-weight: 600;
+        margin-bottom: .45rem;
+        color: #334155;
+    }
+
+    .profiling-modal-body .form-control {
+        min-height: 44px;
+    }
+
+    .modal-fullscreen-sm-down .profiling-modal-content {
+        border-radius: 0;
+    }
+
+    @media (max-width: 575.98px) {
+        .profiling-modal-header,
+        .profiling-modal-body,
+        .profiling-modal-footer {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .profiling-modal-footer {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: .65rem;
+        }
+
+        .profiling-modal-footer .btn {
+            width: 100%;
+        }
+    }
+</style>
+@endpush
 
 @push('scripts')
 <script>
@@ -124,6 +196,26 @@
             const form = $(this).closest('.delete-form')[0];
             confirmDelete(form);
         });
+
+        $(document).on('click', '.btn-edit-profiling', function () {
+            const button = $(this);
+            const id = button.data('id');
+
+            $('#editProfilingForm').attr('action', `/operator/profiling/${id}`);
+            $('#edit_nama_kapal').val(button.data('nama_kapal'));
+            $('#edit_asal_keberangkatan').val(button.data('asal_keberangkatan'));
+            $('#edit_tujuan_keberangkatan').val(button.data('tujuan_keberangkatan'));
+            $('#edit_waktu_keberangkatan').val(button.data('waktu_keberangkatan'));
+            $('#edit_kapasitas_penumpang').val(button.data('kapasitas_penumpang'));
+        });
+
+        @if ($errors->any())
+            const createModalEl = document.getElementById('createProfilingModal');
+            if (createModalEl) {
+                const createModal = new bootstrap.Modal(createModalEl);
+                createModal.show();
+            }
+        @endif
     });
 </script>
 @endpush

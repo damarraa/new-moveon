@@ -62,4 +62,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Profiling::class, 'user_id', 'id');
     }
+    
+        public function pelaporanKapals()
+    {
+        return $this->hasMany(PelaporanKapal::class);
+    }
 }
