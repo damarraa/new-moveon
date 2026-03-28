@@ -12,9 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('company_name')->nullable();
+            $table->string('owner_name')->nullable();
+            $table->enum('status', ['Pemilik', 'Pengelola'])->nullable();
+            $table->text('office_address')->nullable();
+            $table->string('phone', 25)->unique();
+            $table->string('email')->nullable()->unique();
+            $table->string('jabatan')->nullable();
+            $table->string('wilayah')->nullable();
+            $table->string('loket_samsat')->nullable();
+            $table->enum('role', ['operator', 'internal', 'super_admin'])->default('operator');
+
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
@@ -29,7 +40,7 @@ return new class extends Migration
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignUuid('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
@@ -42,8 +53,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
     }
 };

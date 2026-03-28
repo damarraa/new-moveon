@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Operator;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Profiling;
+use Illuminate\Support\Facades\Auth;
 
 class ProfilingController extends Controller
 {
@@ -13,36 +16,109 @@ class ProfilingController extends Controller
 
     public function index()
     {
-        return view('profiling.index');
+        $profilings = Profiling::where('user_id', Auth::id())
+            ->latest()
+            ->get();
+
+        return view('operator.profiling.index', compact('profilings'));
     }
 
     public function create()
     {
-        return view('profiling.create');
+        return view('operator.profiling.create');
     }
 
     public function show($id)
     {
-        return view('profiling.show', ['id' => $id]);
+        $profiling = Profiling::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        return view('operator.profiling.show', compact('profiling'));
     }
 
     public function edit($id)
     {
-        return view('profiling.edit', ['id' => $id]);
+        $profiling = Profiling::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        return view('operator.profiling.edit', compact('profiling'));
     }
 
     public function store(Request $request)
     {
-        return redirect()->route('profiling.index')->with('success', 'Data profiling berhasil disimpan.');
+        $validated = $request->validate([
+            'nama_kapal'           => ['required', 'string', 'max:255'],
+            'asal_keberangkatan'   => ['required', 'string', 'max:255'],
+            'tujuan_keberangkatan' => ['required', 'string', 'max:255'],
+            'waktu_keberangkatan'  => ['required', 'date'],
+            'kapasitas_penumpang'  => ['required', 'integer', 'min:1'],
+        ], [
+            'nama_kapal.required'           => 'Nama kapal wajib diisi.',
+            'asal_keberangkatan.required'   => 'Asal keberangkatan wajib diisi.',
+            'tujuan_keberangkatan.required' => 'Tujuan keberangkatan wajib diisi.',
+            'waktu_keberangkatan.required'  => 'Waktu keberangkatan wajib diisi.',
+            'waktu_keberangkatan.date'      => 'Format waktu keberangkatan tidak valid.',
+            'kapasitas_penumpang.required'  => 'Kapasitas penumpang wajib diisi.',
+            'kapasitas_penumpang.integer'   => 'Kapasitas penumpang harus berupa angka.',
+            'kapasitas_penumpang.min'       => 'Kapasitas penumpang minimal 1.',
+        ]);
+
+        Profiling::create([
+            'user_id'               => Auth::id(),
+            'nama_kapal'            => $validated['nama_kapal'],
+            'asal_keberangkatan'    => $validated['asal_keberangkatan'],
+            'tujuan_keberangkatan'  => $validated['tujuan_keberangkatan'],
+            'waktu_keberangkatan'   => $validated['waktu_keberangkatan'],
+            'kapasitas_penumpang'   => $validated['kapasitas_penumpang'],
+        ]);
+
+        return redirect()
+            ->route('operator.profiling.index')
+            ->with('success', 'Data profiling berhasil disimpan.');
     }
 
     public function update(Request $request, $id)
     {
-        return redirect()->route('profiling.index')->with('success', 'Data profiling berhasil diperbarui.');
+        $profiling = Profiling::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $validated = $request->validate([
+            'nama_kapal'           => ['required', 'string', 'max:255'],
+            'asal_keberangkatan'   => ['required', 'string', 'max:255'],
+            'tujuan_keberangkatan' => ['required', 'string', 'max:255'],
+            'waktu_keberangkatan'  => ['required', 'date'],
+            'kapasitas_penumpang'  => ['required', 'integer', 'min:1'],
+        ], [
+            'nama_kapal.required'           => 'Nama kapal wajib diisi.',
+            'asal_keberangkatan.required'   => 'Asal keberangkatan wajib diisi.',
+            'tujuan_keberangkatan.required' => 'Tujuan keberangkatan wajib diisi.',
+            'waktu_keberangkatan.required'  => 'Waktu keberangkatan wajib diisi.',
+            'waktu_keberangkatan.date'      => 'Format waktu keberangkatan tidak valid.',
+            'kapasitas_penumpang.required'  => 'Kapasitas penumpang wajib diisi.',
+            'kapasitas_penumpang.integer'   => 'Kapasitas penumpang harus berupa angka.',
+            'kapasitas_penumpang.min'       => 'Kapasitas penumpang minimal 1.',
+        ]);
+
+        $profiling->update($validated);
+
+        return redirect()
+            ->route('operator.profiling.index')
+            ->with('success', 'Data profiling berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
-        return redirect()->route('profiling.index')->with('success', 'Data profiling berhasil dihapus.');
+        $profiling = Profiling::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $profiling->delete();
+
+        return redirect()
+            ->route('operator.profiling.index')
+            ->with('success', 'Data profiling berhasil dihapus.');
     }
 }

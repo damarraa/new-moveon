@@ -81,15 +81,7 @@
                     Contact
                 </a>
 
-                <a href="/register/operator"
-                    class="hidden sm:flex items-center gap-2 border border-brand-softblue text-brand-navy hover:bg-brand-softblue hover:text-white px-5 py-2.5 rounded-full font-medium transition-all shadow-sm hover:shadow-md">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Pendaftaran Operator
-                </a>
-
+          
                 <a href="/login"
                     class="bg-brand-navy text-white hover:bg-blue-900 px-6 py-2.5 rounded-full font-medium transition-all shadow-md hover:shadow-lg flex items-center gap-2 ml-2">
                     Login
@@ -97,6 +89,32 @@
             </div>
         </div>
     </nav>
+
+            @if(session('success'))
+        <div 
+            x-data="{ show: true }" 
+            x-show="show"
+            x-transition
+            class="fixed top-20 right-5 z-50 max-w-sm w-full"
+        >
+            <div class="bg-green-500 text-white px-5 py-4 rounded-xl shadow-lg flex items-start gap-3">
+                <div class="text-xl">✅</div>
+                <div class="flex-1">
+                    <p class="font-semibold">Berhasil</p>
+                    <p class="text-sm">{{ session('success') }}</p>
+                </div>
+                <button @click="show = false" class="text-white hover:text-gray-200">
+                    ✖
+                </button>
+            </div>
+        </div>
+
+        <script>
+            setTimeout(() => {
+                document.querySelector('[x-data]')?.__x?.$data.show = false
+            }, 4000)
+        </script>
+        @endif
 
     <section class="relative pt-40 pb-32 lg:pt-48 lg:pb-40 overflow-hidden bg-slate-50">
         <div id="map-bg" class="absolute inset-0 z-0 opacity-75 mix-blend-multiply"></div>
@@ -131,7 +149,7 @@
                         </svg>
                     </a>
 
-                    <a href="/pendaftaran-operator"
+                    <a href="/register/operator"
                         class="px-8 py-3.5 bg-white hover:bg-slate-100 text-brand-navy border border-slate-300 font-bold rounded-full shadow-md transition-all flex items-center justify-center gap-3 w-full sm:w-auto">
                         Pendaftaran Operator
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,7 +179,7 @@
                     </p>
                 </div>
                 <div class="w-full lg:w-auto">
-                    <a href="/pendaftaran-operator"
+                    <a href="/register/operator"
                         class="inline-flex w-full lg:w-auto items-center justify-center gap-3 px-7 py-3.5 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-orange/30 transition-all">
                         Buka Halaman Pendaftaran Operator
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -199,7 +217,7 @@
                         Portal registrasi mandiri bagi mitra agen pelayaran dan pengelola angkutan untuk mendapatkan
                         akses ke dalam ekosistem pelaporan Jasa Raharja.
                     </p>
-                    <a href="/register-operator"
+                    <a href="/register/operator"
                         class="mt-auto w-full py-3 px-4 bg-brand-softblue text-white font-bold rounded-xl text-center hover:bg-blue-700 shadow-md transition-colors">
                         Daftar Menjadi Operator
                     </a>

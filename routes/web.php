@@ -14,14 +14,12 @@ use App\Http\Controllers\Operator\ProfilingController;
 |--------------------------------------------------------------------------
 */
 
-
-
-// Halaman utama
+// ==================== BERANDA ====================
 Route::get('/', function () {
     return view('Beranda.welcome');
 })->name('welcome');
 
-// Halaman form manifest publik
+// ==================== MANIFEST PUBLIK ====================
 Route::get('/manifest-pelayaran', function () {
     return view('Beranda.manifest-pelayaran');
 })->name('manifest.pelayaran');
@@ -31,21 +29,19 @@ Route::get('/manifest-penyeberangan', function () {
 })->name('manifest.penyeberangan');
 
 
-
-
-// ==================== AUTH  ====================
+// ==================== AUTH GUEST ====================
 Route::middleware('guest')->group(function () {
 
     // Login
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 
-    // Forgot password
+    // Forgot Password
     Route::get('/forgot-password', function () {
         return view('auth.forgot-password');
     })->name('password.request');
 
-    // Register umum diarahkan ke halaman utama
+    // Register umum arahkan ke beranda
     Route::get('/register', function () {
         return redirect()->route('welcome');
     })->name('register');
@@ -60,17 +56,20 @@ Route::middleware('guest')->group(function () {
 });
 
 
-
-
 // ==================== AUTH USER ====================
 Route::middleware('auth')->group(function () {
 
+    // Logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+    // Dashboard
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    Route::resource('profiling', ProfilingController::class);
-    Route::resource('manifest', ManifestController::class);
-    Route::resource('pelaporan-kapal', PelaporanKapalController::class);
+    // ==================== OPERATOR ====================
+    Route::prefix('operator')->name('operator.')->group(function () {
+        Route::resource('profiling', ProfilingController::class);
+        Route::resource('manifest', ManifestController::class);
+        Route::resource('pelaporan-kapal', PelaporanKapalController::class);
+    });
 });

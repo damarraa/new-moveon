@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Operator;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller; 
+
 
 class PelaporanKapalController extends Controller
 {
@@ -13,36 +15,36 @@ class PelaporanKapalController extends Controller
 
     public function index()
     {
-        return view('pelaporan-kapal.index');
+        return view('operator.pelaporan-kapal.index');
     }
 
     public function create()
     {
-        return view('pelaporan-kapal.create');
+        return view('operator.pelaporan-kapal.create');
     }
 
     public function show($id)
     {
-        return view('pelaporan-kapal.show', ['id' => $id]);
+        return view('operator.pelaporan-kapal.show', ['id' => $id]);
     }
 
     public function edit($id)
     {
-        return view('pelaporan-kapal.edit', ['id' => $id]);
+        return view('operator.pelaporan-kapal.edit', ['id' => $id]);
     }
 
     public function store(Request $request)
     {
-        return redirect()->route('pelaporan-kapal.index')->with('success', 'Laporan kapal berhasil disimpan.');
+        return redirect()->route('operator.pelaporan-kapal.index')->with('success', 'Laporan kapal berhasil disimpan.');
     }
 
     public function update(Request $request, $id)
     {
-        return redirect()->route('pelaporan-kapal.index')->with('success', 'Laporan kapal berhasil diperbarui.');
+        return redirect()->route('operator.pelaporan-kapal.index')->with('success', 'Laporan kapal berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
-        return redirect()->route('pelaporan-kapal.index')->with('success', 'Laporan kapal berhasil dihapus.');
+        return redirect()->route('operator.pelaporan-kapal.index')->with('success', 'Laporan kapal berhasil dihapus.');
     }
 }

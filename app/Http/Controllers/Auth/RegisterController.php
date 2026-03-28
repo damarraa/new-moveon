@@ -5,13 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    protected string $redirectTo = '/dashboard';
+    protected string $redirectTo = '/';
 
     public function __construct()
     {
@@ -41,6 +39,7 @@ class RegisterController extends Controller
             'company_name.required'   => 'Nama perusahaan / perorangan wajib diisi.',
             'owner_name.required'     => 'Nama pemilik / pengelola wajib diisi.',
             'status.required'         => 'Status wajib dipilih.',
+            'status.in'               => 'Status harus Pemilik atau Pengelola.',
             'office_address.required' => 'Alamat kantor wajib diisi.',
             'phone.required'          => 'Nomor telepon wajib diisi.',
             'phone.unique'            => 'Nomor telepon sudah terdaftar.',
@@ -51,7 +50,7 @@ class RegisterController extends Controller
 
         $validator->validate();
 
-        $user = User::create([
+        User::create([
             'name'           => $request->owner_name,
             'company_name'   => $request->company_name,
             'owner_name'     => $request->owner_name,
@@ -63,12 +62,13 @@ class RegisterController extends Controller
             'wilayah'        => null,
             'loket_samsat'   => null,
             'role'           => 'operator',
-            'password'       => Hash::make($request->password),
+            'password'       => $request->password,
         ]);
 
-        Auth::login($user);
-
-        return redirect($this->redirectTo)->with('success', 'Pendaftaran operator berhasil.');
+        return redirect($this->redirectTo)->with(
+            'success',
+            'Pendaftaran operator berhasil. Silakan login melalui halaman beranda.'
+        );
     }
 
     public function registerInternal(Request $request)
@@ -93,6 +93,7 @@ class RegisterController extends Controller
             'wilayah.required'      => 'Wilayah wajib diisi.',
             'loket_samsat.required' => 'Loket Samsat wajib diisi.',
             'role.required'         => 'Role wajib dipilih.',
+            'role.in'               => 'Role harus internal atau super_admin.',
             'password.required'     => 'Password wajib diisi.',
             'password.confirmed'    => 'Konfirmasi password tidak cocok.',
             'password.min'          => 'Password minimal 8 karakter.',
@@ -100,7 +101,7 @@ class RegisterController extends Controller
 
         $validator->validate();
 
-        $user = User::create([
+        User::create([
             'name'           => $request->name,
             'company_name'   => null,
             'owner_name'     => null,
@@ -112,11 +113,12 @@ class RegisterController extends Controller
             'wilayah'        => $request->wilayah,
             'loket_samsat'   => $request->loket_samsat,
             'role'           => $request->role,
-            'password'       => Hash::make($request->password),
+            'password'       => $request->password,
         ]);
 
-        Auth::login($user);
-
-        return redirect($this->redirectTo)->with('success', 'Pendaftaran internal berhasil.');
+        return redirect($this->redirectTo)->with(
+            'success',
+            'Pendaftaran berhasil. Akun sudah dibuat, silakan login melalui halaman beranda.'
+        );
     }
 }

@@ -13,6 +13,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
 
     @stack('styles')
 
@@ -37,15 +39,15 @@
                 return 'bi-grid-fill';
             }
 
-            if (request()->is('profiling') || request()->is('profiling/*')) {
+            if (request()->is('operator/profiling') || request()->is('operator/profiling/*')) {
                 return 'bi-people-fill';
             }
 
-            if (request()->is('manifest') || request()->is('manifest/*')) {
+            if (request()->is('operator/manifest') || request()->is('operator/manifest/*')) {
                 return 'bi-file-earmark-text-fill';
             }
 
-            if (request()->is('pelaporan-kapal') || request()->is('pelaporan-kapal/*')) {
+            if (request()->is('operator/pelaporan-kapal') || request()->is('operator/pelaporan-kapal/*')) {
                 return 'bi-file-earmark-bar-graph-fill';
             }
 
@@ -60,6 +62,8 @@
             --brand-primary: #0f7bd9;
             --brand-primary-dark: #0a5db0;
             --brand-danger: #dc3545;
+            --brand-warning: #f59e0b;
+            --brand-info: #0ea5e9;
             --ink: #0f172a;
             --muted: #667085;
             --line: #e5e9f2;
@@ -152,41 +156,14 @@
             border-color: var(--brand-primary-dark);
         }
 
-        .btn-outline-soft {
-            background: #fff;
-            border: 1px solid #d0d7e6;
-            color: var(--ink);
-            border-radius: 999px;
-            padding-inline: 1rem;
-        }
-
-        .btn-outline-soft:hover {
-            background: #f3f6fb;
-            border-color: #c3cce3;
-        }
-
-        .btn-pill-primary {
-            border-radius: 999px;
-            background: var(--brand-primary);
-            border-color: var(--brand-primary);
-            color: #fff;
-            font-size: var(--fs-sm);
-            font-weight: 500;
-            padding-inline: 1rem;
-            box-shadow: 0 4px 12px rgba(15, 123, 217, .28);
-        }
-
-        .btn-pill-primary:hover {
-            background: var(--brand-primary-dark);
-            border-color: var(--brand-primary-dark);
-        }
-
         .form-control,
         .form-select {
             font-size: var(--fs-sm);
             border-radius: 10px;
             border-color: var(--line);
-            min-height: 40px;
+            min-height: 42px;
+            background: var(--bg);
+            color: var(--ink);
         }
 
         .form-control:focus,
@@ -204,7 +181,227 @@
 
         .table-responsive {
             border-radius: var(--radius-sm);
+            overflow-x: hidden;
+            overflow-y: visible;
+            width: 100%;
+        }
+
+        .content-card {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            box-shadow: var(--shadow-soft);
+            background: var(--bg);
             overflow: hidden;
+        }
+
+        .content-card .card-body {
+            padding: 1rem 1rem;
+        }
+
+        .form-page-card {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            box-shadow: var(--shadow-soft);
+            background: var(--bg);
+        }
+
+        .form-page-card .card-body {
+            padding: 1.25rem;
+        }
+
+        .app-table {
+            margin: 0;
+            width: 100% !important;
+            border-collapse: separate !important;
+            border-spacing: 0;
+            table-layout: auto;
+        }
+
+        .app-table thead th {
+            background: #f8fafc !important;
+            color: #334155;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+            border-bottom: 1px solid #e2e8f0 !important;
+            border-top: 0 !important;
+            padding: 14px 12px;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .app-table tbody td {
+            font-size: 13px;
+            color: #0f172a;
+            padding: 14px 12px;
+            border-bottom: 1px solid #eef2f7 !important;
+            vertical-align: middle;
+            background: #fff;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .app-table tbody tr:hover td {
+            background: #f8fbff;
+        }
+
+        .table-empty-state {
+            text-align: center;
+            color: var(--muted);
+            padding: 18px 10px 4px;
+            font-size: 13px;
+        }
+
+        .table-action-col,
+        .table-action-cell {
+            position: static;
+            right: auto;
+            z-index: auto;
+            background: #fff !important;
+            width: 138px;
+            min-width: 138px;
+            max-width: 138px;
+            box-shadow: none;
+        }
+
+        .app-table thead .table-action-col {
+            background: #f8fafc !important;
+        }
+
+        .table-action-wrap {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: nowrap;
+        }
+
+        .table-action-btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .table-action-btn i {
+            font-size: 13px;
+        }
+
+        .table-control-col,
+        .app-table td.dtr-control {
+            width: 42px;
+            min-width: 42px;
+            max-width: 42px;
+            text-align: center;
+        }
+
+        .app-table td.dtr-control {
+            cursor: pointer;
+        }
+
+        .app-table td.dtr-control::before {
+            content: '+';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--brand-primary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 1;
+        }
+
+        .app-table tr.parent td.dtr-control::before {
+            content: '−';
+            background: var(--brand-danger);
+        }
+
+        table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before,
+        table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before {
+            display: none !important;
+        }
+
+        .dtr-details {
+            width: 100%;
+        }
+
+        .dtr-details li {
+            padding: 8px 0 !important;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .dtr-title {
+            font-weight: 700;
+            color: #475569;
+            min-width: 150px;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .dtr-data {
+            color: #0f172a;
+        }
+
+        .dataTables_wrapper {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .dataTables_wrapper .row {
+            --bs-gutter-x: 1rem;
+        }
+
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #dbe3ee;
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin-left: 8px;
+            max-width: 100%;
+        }
+
+        .dataTables_wrapper .dataTables_length select {
+            border: 1px solid #dbe3ee;
+            border-radius: 10px;
+            padding: 6px 30px 6px 10px;
+        }
+
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter,
+        .dataTables_wrapper .dataTables_paginate {
+            font-size: 12px;
+        }
+
+        .page-item.active .page-link {
+            background-color: var(--brand-primary);
+            border-color: var(--brand-primary);
+        }
+
+        .page-link {
+            color: var(--brand-primary);
+        }
+
+        .page-link:focus {
+            box-shadow: 0 0 0 .15rem rgba(15,123,217,.18);
+        }
+
+        .app-page {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .page-form-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            margin-top: 1rem;
         }
 
         #loader-wrapper {
@@ -659,72 +856,6 @@
             100% { background-color: transparent; }
         }
 
-        @media (max-width: 991.98px) {
-            .page-content-wrapper {
-                width: 100%;
-                margin-left: 0;
-            }
-
-            .sidebar-wrapper {
-                transform: translateX(-100%);
-                box-shadow: none;
-            }
-
-            body.sidebar-open .sidebar-wrapper {
-                transform: translateX(0);
-                box-shadow: 0 0 22px rgba(0,0,0,.18);
-            }
-
-            .sidebar-toggler {
-                display: inline-flex;
-            }
-
-            #global-search {
-                width: 190px;
-                max-width: 55vw;
-            }
-        }
-
-        @media (max-width: 767.98px) {
-            .content-container {
-                padding-left: .85rem;
-                padding-right: .85rem;
-            }
-
-            .sidebar-brand img {
-                max-height: 30px;
-                max-width: 118px;
-            }
-
-            .profile-name {
-                display: none;
-            }
-        }
-
-        @media (max-width: 575.98px) {
-            #global-search {
-                width: 160px;
-                max-width: 48vw;
-            }
-
-            .page-header-bar {
-                align-items: flex-start;
-            }
-
-            .ph-actions {
-                width: 100%;
-            }
-        }
-
-        .sidebar-toggler:focus,
-        .nav-icons .nav-link:focus,
-        .sidebar-nav a:focus,
-        #global-search:focus,
-        .sidebar-footer button:focus {
-            outline: 2px solid var(--brand-primary);
-            outline-offset: 2px;
-        }
-
         .swal2-popup.swal2-modal.swal-logout-popup {
             width: 25rem !important;
             padding: 1.25rem 1.25rem 1rem !important;
@@ -758,6 +889,120 @@
             border-radius: 10px !important;
             min-width: 96px;
         }
+
+        @media (max-width: 991.98px) {
+            .page-content-wrapper {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .sidebar-wrapper {
+                transform: translateX(-100%);
+                box-shadow: none;
+            }
+
+            body.sidebar-open .sidebar-wrapper {
+                transform: translateX(0);
+                box-shadow: 0 0 22px rgba(0,0,0,.18);
+            }
+
+            .sidebar-toggler {
+                display: inline-flex;
+            }
+
+            #global-search {
+                width: 190px;
+                max-width: 55vw;
+            }
+
+            .table-action-col,
+            .table-action-cell {
+                width: 118px;
+                min-width: 118px;
+                max-width: 118px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .content-container {
+                padding-left: .85rem;
+                padding-right: .85rem;
+            }
+
+            .sidebar-brand img {
+                max-height: 30px;
+                max-width: 118px;
+            }
+
+            .profile-name {
+                display: none;
+            }
+
+            .content-card .card-body,
+            .form-page-card .card-body {
+                padding: .95rem;
+            }
+
+            .app-table {
+                min-width: 100%;
+            }
+
+            .app-table thead th,
+            .app-table tbody td {
+                font-size: 12px;
+                padding: 12px 10px;
+                white-space: normal;
+                word-break: break-word;
+            }
+
+            .table-action-col,
+            .table-action-cell {
+                width: 112px;
+                min-width: 112px;
+                max-width: 112px;
+            }
+
+            .table-action-btn {
+                width: 30px;
+                height: 30px;
+            }
+
+            .dataTables_wrapper .row:first-child,
+            .dataTables_wrapper .row:last-child {
+                row-gap: 12px;
+            }
+
+            .dataTables_wrapper .dataTables_filter,
+            .dataTables_wrapper .dataTables_length,
+            .dataTables_wrapper .dataTables_info,
+            .dataTables_wrapper .dataTables_paginate {
+                text-align: left !important;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            #global-search {
+                width: 160px;
+                max-width: 48vw;
+            }
+
+            .page-header-bar {
+                align-items: flex-start;
+            }
+
+            .ph-actions {
+                width: 100%;
+            }
+        }
+
+        .sidebar-toggler:focus,
+        .nav-icons .nav-link:focus,
+        .sidebar-nav a:focus,
+        #global-search:focus,
+        .sidebar-footer button:focus {
+            outline: 2px solid var(--brand-primary);
+            outline-offset: 2px;
+        }
     </style>
 </head>
 <body>
@@ -776,7 +1021,7 @@
     @auth
     <nav class="sidebar-wrapper" aria-label="Sidebar navigasi">
         <div class="sidebar-brand">
-            <a href="/dashboard">
+            <a href="{{ route('dashboard') }}">
                 <img src="{{ asset('assets/logo/jasaraharja.png') }}" alt="Logo Aplikasi">
             </a>
         </div>
@@ -786,28 +1031,31 @@
                 <li class="nav-heading">Main Menu</li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ isActiveMenu(['dashboard']) }}" href="/dashboard">
+                    <a class="nav-link {{ isActiveMenu(['dashboard']) }}" href="{{ route('dashboard') }}">
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ isActiveMenu(['profiling', 'profiling/*']) }}" href="/profiling">
+                    <a class="nav-link {{ isActiveMenu(['operator/profiling', 'operator/profiling/*']) }}"
+                       href="{{ route('operator.profiling.index') }}">
                         <i class="bi bi-people-fill"></i>
                         <span>Daftar Profiling</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ isActiveMenu(['manifest', 'manifest/*']) }}" href="/manifest">
+                    <a class="nav-link {{ isActiveMenu(['operator/manifest', 'operator/manifest/*']) }}"
+                       href="{{ route('operator.manifest.index') }}">
                         <i class="bi bi-file-earmark-text-fill"></i>
                         <span>Rekap Data Manifest</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ isActiveMenu(['pelaporan-kapal', 'pelaporan-kapal/*']) }}" href="/pelaporan-kapal">
+                    <a class="nav-link {{ isActiveMenu(['operator/pelaporan-kapal', 'operator/pelaporan-kapal/*']) }}"
+                       href="{{ route('operator.pelaporan-kapal.index') }}">
                         <i class="bi bi-file-earmark-bar-graph-fill"></i>
                         <span>Pelaporan Kapal</span>
                     </a>
@@ -859,7 +1107,7 @@
                             </h6>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="/profile">
+                            <a class="dropdown-item" href="#">
                                 <i class="bi bi-person me-2"></i>Profil
                             </a>
                         </li>
@@ -885,7 +1133,7 @@
                         <div>
                             <div class="ph-title">{{ $pageTitle }}</div>
                             <div class="ph-breadcrumb">
-                                <a href="/dashboard">Home</a>
+                                <a href="{{ route('dashboard') }}">Home</a>
                                 <span class="sep">›</span>
                                 <span>{{ $pageBreadcrumb }}</span>
                             </div>
@@ -901,36 +1149,6 @@
             </div>
             @endauth
 
-            @if(session('success'))
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            timer: 2500,
-                            showConfirmButton: false,
-                            icon: 'success',
-                            title: @json(session('success'))
-                        });
-                    });
-                </script>
-            @endif
-
-            @if(session('error'))
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            timer: 3000,
-                            showConfirmButton: false,
-                            icon: 'error',
-                            title: @json(session('error'))
-                        });
-                    });
-                </script>
-            @endif
-
             @yield('content')
         </main>
 
@@ -940,7 +1158,7 @@
     </div>
 
     @auth
-    <form id="logout-form" action="/logout" method="POST" class="d-none">
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
         @csrf
     </form>
     @endauth
@@ -948,6 +1166,10 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 
     <script>
         (function initTheme() {
@@ -1036,14 +1258,55 @@
             loaderEl.style.visibility = 'hidden';
         };
 
-        window.toast = (msg, icon = 'info') => Swal.fire({
-            toast: true,
-            position: 'top-end',
-            timer: 2500,
-            showConfirmButton: false,
-            icon,
-            title: msg
-        });
+        window.toast = function (msg, icon = 'success') {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: icon,
+                title: msg,
+                showConfirmButton: false,
+                timer: 2600,
+                timerProgressBar: true
+            });
+        };
+
+        @if(session('success'))
+            document.addEventListener('DOMContentLoaded', function () {
+                toast(@json(session('success')), 'success');
+            });
+        @endif
+
+        @if(session('error'))
+            document.addEventListener('DOMContentLoaded', function () {
+                toast(@json(session('error')), 'error');
+            });
+        @endif
+
+        function confirmDelete(form, title = 'Hapus data ini?', text = 'Data yang dihapus tidak bisa dikembalikan.') {
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Menghapus...',
+                        text: 'Mohon tunggu sebentar',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+                    form.submit();
+                }
+            });
+        }
 
         function confirmLogout() {
             Swal.fire({
@@ -1063,6 +1326,45 @@
                 }
             });
         }
+
+        window.initAppDataTable = function(selector, options = {}) {
+            const $table = $(selector);
+            if (!$table.length) return null;
+
+            const hasRows = $table.find('tbody tr').length > 0;
+            if (!hasRows) return null;
+
+            if ($.fn.DataTable.isDataTable(selector)) {
+                $table.DataTable().destroy();
+            }
+
+            const defaultOptions = {
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: 0
+                    }
+                },
+                autoWidth: false,
+                scrollX: false,
+                language: {
+                    search: "Cari:",
+                    lengthMenu: "Tampilkan _MENU_ data",
+                    zeroRecords: "Data tidak ditemukan",
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    infoEmpty: "Tidak ada data",
+                    infoFiltered: "(difilter dari _MAX_ total data)",
+                    paginate: {
+                        first: "Awal",
+                        last: "Akhir",
+                        next: "›",
+                        previous: "‹"
+                    }
+                }
+            };
+
+            return $table.DataTable($.extend(true, {}, defaultOptions, options));
+        };
 
         (function initGlobalContentSearch() {
             const $input = $('#global-search');
