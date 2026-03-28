@@ -69,8 +69,16 @@
 
             <div class="flex items-center gap-3 lg:gap-4">
                 <a href="#layanan"
-                    class="hidden md:flex items-center gap-2 text-slate-600 hover:text-brand-orange font-medium transition-colors">
-                    Layanan Portal
+                    class="hidden lg:flex items-center gap-2 text-sm text-slate-600 hover:text-brand-orange font-medium transition-colors">
+                    Pendaftaran Operator
+                </a>
+                <a href="#layanan"
+                    class="hidden lg:flex items-center gap-2 text-sm text-slate-600 hover:text-brand-orange font-medium transition-colors">
+                    Check-in Manifest
+                </a>
+                <a href="#contact"
+                    class="hidden lg:flex items-center gap-2 text-sm text-slate-600 hover:text-brand-orange font-medium transition-colors">
+                    Contact
                 </a>
 
                 <a href="/register/operator"
@@ -83,13 +91,8 @@
                 </a>
 
                 <a href="/login"
-                    class="bg-brand-navy text-white hover:bg-blue-900 px-6 py-2.5 rounded-full font-medium transition-all shadow-md hover:shadow-lg flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
-                        </path>
-                    </svg>
-                    Login Admin
+                    class="bg-brand-navy text-white hover:bg-blue-900 px-6 py-2.5 rounded-full font-medium transition-all shadow-md hover:shadow-lg flex items-center gap-2 ml-2">
+                    Login
                 </a>
             </div>
         </div>
@@ -175,25 +178,30 @@
         <div class="container mx-auto px-6 lg:px-12">
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-bold text-brand-navy mb-4 font-poppins">Pilih Layanan Portal</h2>
-                <p class="text-slate-600 max-w-2xl mx-auto">Silakan pilih jenis pelaporan operasional atau check-in
-                    manifest sesuai dengan kebutuhan Anda.</p>
+                <p class="text-slate-600 max-w-2xl mx-auto">Silakan pilih layanan pendaftaran agen operasional atau
+                    portal check-in manifest terpadu.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
 
                 <div
-                    class="bg-slate-50 rounded-2xl p-8 border border-slate-200 hover:shadow-xl hover:border-brand-softblue transition-all duration-300 flex flex-col h-full group">
+                    class="bg-slate-50 rounded-2xl p-8 border border-slate-200 hover:shadow-xl hover:border-brand-softblue transition-all duration-300 flex flex-col h-full group relative overflow-hidden">
+                    <div
+                        class="absolute top-0 right-0 bg-brand-softblue text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">
+                        Mitra / Agen
+                    </div>
                     <div
                         class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                        🚘
+                        🏢
                     </div>
-                    <h3 class="text-xl font-bold text-brand-navy mb-3">Form CRM & DTD</h3>
+                    <h3 class="text-xl font-bold text-brand-navy mb-3">Pendaftaran Operator</h3>
                     <p class="text-slate-600 mb-8 flex-grow text-sm leading-relaxed">
-                        Portal input dan pengelolaan data kunjungan kendaraan angkutan darat terpadu.
+                        Portal registrasi mandiri bagi mitra agen pelayaran dan pengelola angkutan untuk mendapatkan
+                        akses ke dalam ekosistem pelaporan Jasa Raharja.
                     </p>
-                    <a href="/form-crm"
-                        class="w-full py-3 px-4 bg-white border-2 border-slate-200 text-brand-navy font-bold rounded-xl text-center hover:bg-brand-navy hover:text-white hover:border-brand-navy transition-colors">
-                        Isi Form CRM
+                    <a href="/register-operator"
+                        class="mt-auto w-full py-3 px-4 bg-brand-softblue text-white font-bold rounded-xl text-center hover:bg-blue-700 shadow-md transition-colors">
+                        Daftar Menjadi Operator
                     </a>
                 </div>
 
@@ -201,56 +209,28 @@
                     class="bg-slate-50 rounded-2xl p-8 border border-slate-200 hover:shadow-xl hover:border-brand-orange transition-all duration-300 flex flex-col h-full group relative overflow-hidden">
                     <div
                         class="absolute top-0 right-0 bg-brand-orange text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">
-                        Pelayaran
+                        Penumpang
                     </div>
                     <div
                         class="w-16 h-16 bg-orange-100 text-brand-orange rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
                         🚢
                     </div>
-                    <h3 class="text-xl font-bold text-brand-navy mb-3">Check-In Manifest Kapal Umum</h3>
+                    <h3 class="text-xl font-bold text-brand-navy mb-3">Check-In Manifest Terpadu</h3>
                     <p class="text-slate-600 mb-6 flex-grow text-sm leading-relaxed">
-                        Input data penumpang untuk kapal pelayaran umum. Data terintegrasi langsung dengan sistem pusat.
+                        Portal satu pintu untuk pelaporan data manifest Pelayaran Umum maupun Penyeberangan Roro
+                        (mendukung pendaftaran kendaraan).
                     </p>
 
                     <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-6 flex gap-3 items-start">
                         <span class="text-green-600 text-lg">📱</span>
                         <p class="text-[11px] text-green-700 font-medium leading-tight">
-                            Bukti E-Ticket PDF akan dikirim otomatis ke WhatsApp untuk ditunjukkan ke petugas pelabuhan.
+                            Bukti E-Ticket PDF akan dikirim otomatis ke WhatsApp Anda.
                         </p>
                     </div>
 
-                    <a href="/manifest-pelayaran"
+                    <a href="/checkin-manifest"
                         class="mt-auto w-full py-3 px-4 bg-brand-orange text-white font-bold rounded-xl text-center hover:bg-orange-600 shadow-md transition-colors">
-                        Check-In Pelayaran
-                    </a>
-                </div>
-
-                <div
-                    class="bg-slate-50 rounded-2xl p-8 border border-slate-200 hover:shadow-xl hover:border-brand-softblue transition-all duration-300 flex flex-col h-full group relative overflow-hidden">
-                    <div
-                        class="absolute top-0 right-0 bg-brand-softblue text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">
-                        Penyeberangan Roro
-                    </div>
-                    <div
-                        class="w-16 h-16 bg-cyan-100 text-cyan-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                        ⛴️
-                    </div>
-                    <h3 class="text-xl font-bold text-brand-navy mb-3">Check-In Manifest Penyeberangan</h3>
-                    <p class="text-slate-600 mb-6 flex-grow text-sm leading-relaxed">
-                        Khusus KMP Lome, KMP Tirus Meranti, KMP Wira Loewisa, dan KMP Teluk Singkil (Mendukung
-                        pendaftaran kendaraan).
-                    </p>
-
-                    <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-6 flex gap-3 items-start">
-                        <span class="text-green-600 text-lg">📱</span>
-                        <p class="text-[11px] text-green-700 font-medium leading-tight">
-                            Bukti E-Ticket PDF akan dikirim otomatis ke WhatsApp untuk ditunjukkan ke petugas pelabuhan.
-                        </p>
-                    </div>
-
-                    <a href="/manifest-penyeberangan"
-                        class="mt-auto w-full py-3 px-4 bg-brand-softblue text-white font-bold rounded-xl text-center hover:bg-blue-600 shadow-md transition-colors">
-                        Check-In Penyeberangan
+                        Mulai Check-In
                     </a>
                 </div>
 
@@ -258,8 +238,33 @@
         </div>
     </section>
 
-    <section class="relative z-20 py-20 px-6 lg:px-12 bg-slate-50 pointer-events-none">
-        <div class="container mx-auto pointer-events-auto">
+    <section id="about" class="relative z-20 pt-24 pb-12 px-6 lg:px-12 bg-slate-50">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col lg:flex-row items-center gap-12 mb-16">
+                <div class="lg:w-1/2">
+                    <h2 class="text-sm font-bold text-brand-orange tracking-widest uppercase mb-2">Tentang Sistem</h2>
+                    <h3 class="text-3xl font-bold text-brand-navy mb-6 font-poppins">Transformasi Digital Pelayanan
+                        Terpadu</h3>
+                    <p class="text-slate-600 mb-4 leading-relaxed text-justify">
+                        <strong>MOVEON</strong> (Mobility Operation and Voyage Engagement Network) adalah inisiatif
+                        strategis dari PT Jasa Raharja Wilayah Riau untuk mendigitalisasi proses pelaporan operasional
+                        dan manifest penumpang.
+                    </p>
+                    <p class="text-slate-600 leading-relaxed text-justify">
+                        Sistem ini dirancang untuk memberikan kemudahan, kecepatan, dan keamanan data bagi mitra
+                        operator kapal dan kendaraan darat dalam melaporkan data perjalanan yang terintegrasi langsung
+                        dengan database pusat Jasa Raharja demi menjamin keselamatan dan hak perlindungan masyarakat.
+                    </p>
+                </div>
+                <div class="lg:w-1/2 flex justify-center">
+                    <div class="relative w-full max-w-md">
+                        <div class="absolute inset-0 bg-brand-softblue/10 rounded-3xl transform rotate-3"></div>
+                        <img src="{{ asset('images/logo.png') }}" alt="MOVEON Concept"
+                            class="relative z-10 w-full bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
+                    </div>
+                </div>
+            </div>
+
             <div class="glass-panel shadow-lg rounded-3xl p-8 lg:p-10 border-t-4 border-t-brand-navy">
                 <h3 class="text-xl font-bold text-brand-navy mb-8 text-center font-poppins">Alur Sistem Terintegrasi
                 </h3>
@@ -270,11 +275,11 @@
 
                     @php
                         $steps = [
-                            ['icon' => '📝', 'title' => 'Input Data', 'desc' => 'CRM & Manifest'],
-                            ['icon' => '📱', 'title' => 'E-Ticket WA', 'desc' => 'Tiket PDF Otomatis'],
+                            ['icon' => '📝', 'title' => 'Input Data', 'desc' => 'Operator & Guest'],
+                            ['icon' => '📱', 'title' => 'E-Ticket WA', 'desc' => 'Distribusi Dokumen'],
                             ['icon' => '🛡️', 'title' => 'Validation', 'desc' => 'Verifikasi Petugas'],
-                            ['icon' => '📊', 'title' => 'Monitoring', 'desc' => 'Dashboard Admin'],
-                            ['icon' => '📑', 'title' => 'Reporting', 'desc' => 'Ekspor Data Resmi'],
+                            ['icon' => '📊', 'title' => 'Monitoring', 'desc' => 'Dashboard Real-time'],
+                            ['icon' => '📑', 'title' => 'Reporting', 'desc' => 'Rekapitulasi Resmi'],
                         ];
                     @endphp
 
@@ -289,6 +294,67 @@
                             <p class="text-xs text-slate-500 mt-1">{{ $step['desc'] }}</p>
                         </div>
                     @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 bg-white border-t border-slate-200">
+        <div class="container mx-auto px-6 lg:px-12">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-brand-navy mb-4 font-poppins">Butuh Bantuan Operasional?</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Tim operasional dan IT Support Jasa Raharja Wilayah Riau
+                    siap
+                    membantu kendala Anda terkait pendaftaran sistem atau pelaporan manifest.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <div
+                    class="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center hover:shadow-md transition-shadow">
+                    <div
+                        class="w-14 h-14 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-brand-navy mb-2">Kantor Wilayah Riau</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">Jl. Jend. Sudirman No.285, Simpang Empat, Kec.
+                        Pekanbaru Kota, Kota Pekanbaru, Riau 28121</p>
+                </div>
+
+                <div
+                    class="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center hover:shadow-md transition-shadow">
+                    <div
+                        class="w-14 h-14 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-brand-navy mb-2">WhatsApp Center</h3>
+                    <p class="text-sm text-slate-600 mb-4">Senin - Jumat (08:00 - 17:00)</p>
+                    <a href="https://wa.me/6281234567890" target="_blank"
+                        class="text-green-600 font-semibold hover:text-green-700">Chat Sekarang &rarr;</a>
+                </div>
+
+                <div
+                    class="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center hover:shadow-md transition-shadow">
+                    <div
+                        class="w-14 h-14 bg-orange-100 text-brand-orange rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-brand-navy mb-2">Email Support</h3>
+                    <p class="text-sm text-slate-600 mb-4">Dukungan teknis 24/7</p>
+                    <a href="mailto:support.riau@jasaraharja.co.id"
+                        class="text-brand-orange font-semibold hover:text-orange-600">Kirim Email &rarr;</a>
                 </div>
             </div>
         </div>
