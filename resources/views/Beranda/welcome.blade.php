@@ -61,17 +61,27 @@
         class="fixed w-full top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm py-3 transition-all duration-300 border-b border-slate-200">
         <div class="container mx-auto px-6 lg:px-12 flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <img src="{{ asset('images/jasaraharja.png') }}" alt="Jasa Raharja" class="h-8 lg:h-10 object-contain">
+                <img src="{{ asset('assets/logo/jasaraharja.png') }}" alt="Jasa Raharja" class="h-8 lg:h-10 object-contain">
                 <div class="h-8 w-px bg-slate-300 hidden sm:block"></div>
-                <img src="{{ asset('images/logo.png') }}" alt="MOVEON"
+                <img src="{{ asset('assets/logo/logo.png') }}" alt="MOVEON"
                     class="h-10 lg:h-12 object-contain hidden sm:block">
             </div>
 
-            <div class="flex items-center gap-3 lg:gap-6">
+            <div class="flex items-center gap-3 lg:gap-4">
                 <a href="#layanan"
                     class="hidden md:flex items-center gap-2 text-slate-600 hover:text-brand-orange font-medium transition-colors">
                     Layanan Portal
                 </a>
+
+                <a href="/register/operator"
+                    class="hidden sm:flex items-center gap-2 border border-brand-softblue text-brand-navy hover:bg-brand-softblue hover:text-white px-5 py-2.5 rounded-full font-medium transition-all shadow-sm hover:shadow-md">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Pendaftaran Operator
+                </a>
+
                 <a href="/login"
                     class="bg-brand-navy text-white hover:bg-blue-900 px-6 py-2.5 rounded-full font-medium transition-all shadow-md hover:shadow-lg flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,12 +127,46 @@
                                 d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                         </svg>
                     </a>
+
+                    <a href="/pendaftaran-operator"
+                        class="px-8 py-3.5 bg-white hover:bg-slate-100 text-brand-navy border border-slate-300 font-bold rounded-full shadow-md transition-all flex items-center justify-center gap-3 w-full sm:w-auto">
+                        Pendaftaran Operator
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4v16m8-8H4"></path>
+                        </svg>
+                    </a>
                 </div>
             </div>
 
             <div class="hidden lg:flex lg:w-1/3 justify-center items-center drop-shadow-2xl z-10">
-                <img src="{{ asset('images/logo.png') }}" alt="Mascot MOVEON"
+                <img src="{{ asset('assets/logo/logo.png') }}" alt="Mascot MOVEON"
                     class="w-full max-w-md transform hover:scale-105 transition-transform duration-500 hover:-rotate-2">
+            </div>
+        </div>
+    </section>
+
+    <section class="relative z-20 -mt-10 px-6 lg:px-12">
+        <div class="container mx-auto">
+            <div
+                class="bg-gradient-to-r from-brand-navy to-slate-800 text-white rounded-3xl shadow-xl px-6 py-6 lg:px-8 lg:py-7 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
+                <div class="max-w-3xl">
+                    <p class="text-brand-orange text-sm font-semibold uppercase tracking-[0.2em] mb-2">Akses Cepat</p>
+                    <h2 class="text-2xl lg:text-3xl font-bold font-poppins mb-2">Pendaftaran Operator</h2>
+                    <p class="text-slate-200 text-sm lg:text-base leading-relaxed">
+                        Daftarkan operator baru ke dalam sistem untuk kebutuhan pengelolaan operasional dan akses portal secara terstruktur.
+                    </p>
+                </div>
+                <div class="w-full lg:w-auto">
+                    <a href="/pendaftaran-operator"
+                        class="inline-flex w-full lg:w-auto items-center justify-center gap-3 px-7 py-3.5 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-orange/30 transition-all">
+                        Buka Halaman Pendaftaran Operator
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -234,7 +278,7 @@
                         ];
                     @endphp
 
-                    @foreach ($steps as $index => $step)
+                    @foreach ($steps as $step)
                         <div
                             class="flex flex-col items-center text-center bg-white lg:bg-transparent p-4 lg:p-0 rounded-xl shadow-sm lg:shadow-none w-full lg:w-auto z-10 hover:transform hover:-translate-y-1 transition-transform">
                             <div
@@ -254,7 +298,7 @@
         <div class="container mx-auto px-6 lg:px-12 flex flex-col lg:flex-row justify-between items-center gap-6">
             <div class="text-center lg:text-left">
                 <div class="flex items-center justify-center lg:justify-start gap-3 mb-2">
-                    <img src="{{ asset('images/jasaraharja.png') }}" alt="Logo Jasa Raharja"
+                    <img src="{{ asset('assets/logo/jasaraharja.png') }}" alt="Logo Jasa Raharja"
                         class="h-8 brightness-0 invert opacity-80">
                 </div>
                 <p class="text-sm mt-2 text-brand-softblue">Mobility Operation and Voyage Engagement Network</p>
@@ -282,7 +326,7 @@
                 subdomains: 'abcd'
             }).addTo(map);
 
-            var marker = L.circleMarker([riauLat, riauLng], {
+            L.circleMarker([riauLat, riauLng], {
                 color: '#E68940',
                 fillColor: '#E68940',
                 fillOpacity: 0.8,

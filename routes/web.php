@@ -1,23 +1,76 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Operator\ManifestController;
+use App\Http\Controllers\Operator\PelaporanKapalController;
+use App\Http\Controllers\Operator\ProfilingController;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+
+
+// Halaman utama
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('Beranda.welcome');
+})->name('welcome');
 
-// Auth
-Route::get('/login', function () {
-    return view('auth.login');
-});
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-});
-
-// Form Manifest
+// Halaman form manifest publik
 Route::get('/manifest-pelayaran', function () {
-    return view('manifest-pelayaran');
-});
+    return view('Beranda.manifest-pelayaran');
+})->name('manifest.pelayaran');
+
 Route::get('/manifest-penyeberangan', function () {
-    return view('manifest-penyeberangan');
+    return view('Beranda.manifest-penyeberangan');
+})->name('manifest.penyeberangan');
+
+
+
+
+// ==================== AUTH  ====================
+Route::middleware('guest')->group(function () {
+
+    // Login
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+
+    // Forgot password
+    Route::get('/forgot-password', function () {
+        return view('auth.forgot-password');
+    })->name('password.request');
+
+    // Register umum diarahkan ke halaman utama
+    Route::get('/register', function () {
+        return redirect()->route('welcome');
+    })->name('register');
+
+    // Register operator
+    Route::get('/register/operator', [RegisterController::class, 'showOperatorForm'])->name('register.operator');
+    Route::post('/register/operator', [RegisterController::class, 'registerOperator'])->name('register.operator.store');
+
+    // Register internal
+    Route::get('/register/internal', [RegisterController::class, 'showInternalForm'])->name('register.internal');
+    Route::post('/register/internal', [RegisterController::class, 'registerInternal'])->name('register.internal.store');
+});
+
+
+
+
+// ==================== AUTH USER ====================
+Route::middleware('auth')->group(function () {
+
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    Route::resource('profiling', ProfilingController::class);
+    Route::resource('manifest', ManifestController::class);
+    Route::resource('pelaporan-kapal', PelaporanKapalController::class);
 });
