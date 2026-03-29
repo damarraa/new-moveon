@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -46,7 +47,8 @@
             box-sizing: border-box;
         }
 
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
             min-height: 100%;
@@ -94,6 +96,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -124,7 +127,7 @@
             left: -50%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.18), transparent);
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.18), transparent);
             transform: rotate(45deg);
             animation: shimmer 8s infinite linear;
         }
@@ -133,6 +136,7 @@
             0% {
                 transform: translateX(-100%) translateY(-100%) rotate(45deg);
             }
+
             100% {
                 transform: translateX(100%) translateY(100%) rotate(45deg);
             }
@@ -164,7 +168,7 @@
             font-weight: 700;
             margin-bottom: 0.9rem;
             font-size: 26px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             letter-spacing: -0.5px;
         }
 
@@ -173,7 +177,7 @@
             opacity: 0.96;
             line-height: 1.7;
             margin-bottom: 1.3rem;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .feature-list {
@@ -187,27 +191,27 @@
 
         .feature-list li {
             padding: 0.55rem 0.8rem;
-            color: rgba(255,255,255,0.96);
+            color: rgba(255, 255, 255, 0.96);
             display: flex;
             align-items: center;
             justify-content: flex-start;
             font-size: 13.5px;
             text-align: left;
-            background: rgba(255,255,255,0.12);
+            background: rgba(255, 255, 255, 0.12);
             border-radius: var(--radius-sm);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.25);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             transition: all 0.3s ease;
         }
 
         .feature-list li:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .feature-list li i {
-            color: rgba(255,255,255,0.98);
+            color: rgba(255, 255, 255, 0.98);
             margin-right: 0.55rem;
             font-size: 1.05rem;
             width: 20px;
@@ -331,7 +335,7 @@
             padding-right: 2.6rem;
         }
 
-        .password-wrapper > .password-toggle {
+        .password-wrapper>.password-toggle {
             position: absolute !important;
             top: 50% !important;
             right: 10px !important;
@@ -353,7 +357,7 @@
             justify-content: center;
         }
 
-        .password-wrapper > .password-toggle:hover {
+        .password-wrapper>.password-toggle:hover {
             color: var(--primary);
             background: var(--soft);
             transform: translateY(-50%) scale(1.05) !important;
@@ -386,7 +390,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: left 0.5s;
         }
 
@@ -422,7 +426,7 @@
             border-radius: var(--radius-sm);
             border: 1px solid;
             border-left: 4px solid;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             margin-bottom: 1rem;
         }
 
@@ -475,6 +479,7 @@
             0% {
                 transform: rotate(0deg);
             }
+
             100% {
                 transform: rotate(360deg);
             }
@@ -529,6 +534,7 @@
         }
 
         @media (max-width: 992px) {
+
             .login-image,
             .login-form {
                 width: 100%;
@@ -613,6 +619,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="login-page-wrapper">
         <div class="login-wrapper">
@@ -663,16 +670,10 @@
                             <label for="login" class="form-label">
                                 <i class="fas fa-user" style="margin-right:8px;"></i>Email / Nomor Telepon
                             </label>
-                            <input
-                                id="login"
-                                type="text"
-                                class="form-control @error('login') is-invalid @enderror"
-                                name="login"
-                                value="{{ old('login') }}"
-                                required
-                                autofocus
-                                placeholder="Masukkan email atau nomor telepon"
-                            >
+                            <input id="login" type="text"
+                                class="form-control @error('login') is-invalid @enderror" name="login"
+                                value="{{ old('login') }}" required autofocus
+                                placeholder="Masukkan email atau nomor telepon">
                             <div class="feature-hint">Gunakan email atau nomor telepon yang terdaftar.</div>
                             @error('login')
                                 <span class="input-error">{{ $message }}</span>
@@ -685,21 +686,11 @@
                             </label>
 
                             <div class="password-wrapper">
-                                <input
-                                    id="password"
-                                    type="password"
-                                    class="form-control @error('password') is-invalid @enderror"
-                                    name="password"
-                                    required
-                                    autocomplete="current-password"
-                                    placeholder="Masukkan password"
-                                >
-                                <button
-                                    type="button"
-                                    class="password-toggle"
-                                    id="togglePassword"
-                                    aria-label="Toggle password visibility"
-                                >
+                                <input id="password" type="password"
+                                    class="form-control @error('password') is-invalid @enderror" name="password"
+                                    required autocomplete="current-password" placeholder="Masukkan password">
+                                <button type="button" class="password-toggle" id="togglePassword"
+                                    aria-label="Toggle password visibility">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
@@ -710,22 +701,18 @@
                         </div>
 
                         <div class="text-center mt-3">
-                            <button
-                                type="submit"
-                                class="btn-login"
-                                id="loginButton"
-                            >
+                            <button type="submit" class="btn-login" id="loginButton">
                                 <i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>
                                 Login
                             </button>
                         </div>
                     </form>
 
-                <div class="register-text">
+                    <div class="register-text">
                         Kembali ke halaman utama?
                         <a href="{{ url('/') }}">Ke Beranda</a>
                     </div>
-                    
+
                     <div class="footer-text">
                         <div>
                             <i class="fas fa-shield-alt"></i>
@@ -742,7 +729,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const loginInput = document.getElementById('login');
             const passwordInput = document.getElementById('password');
             const togglePassword = document.getElementById('togglePassword');
@@ -750,7 +737,7 @@
             const loginButton = document.getElementById('loginButton');
 
             if (togglePassword && passwordInput) {
-                togglePassword.addEventListener('click', function () {
+                togglePassword.addEventListener('click', function() {
                     const icon = this.querySelector('i');
 
                     if (passwordInput.type === 'password') {
@@ -768,7 +755,7 @@
             }
 
             if (form && loginButton && loginInput && passwordInput) {
-                form.addEventListener('submit', function () {
+                form.addEventListener('submit', function() {
                     const login = loginInput.value.trim();
                     const pwd = passwordInput.value.trim();
 
@@ -783,7 +770,7 @@
 
             const inputs = document.querySelectorAll('input[required]');
             inputs.forEach(input => {
-                input.addEventListener('blur', function () {
+                input.addEventListener('blur', function() {
                     this.classList.remove('is-valid', 'is-invalid');
 
                     if (this.value.trim() === '') {
@@ -793,7 +780,7 @@
                     }
                 });
 
-                input.addEventListener('input', function () {
+                input.addEventListener('input', function() {
                     if (this.value.trim() !== '') {
                         this.classList.remove('is-invalid');
                     }
@@ -804,7 +791,7 @@
                 setTimeout(() => loginInput.focus(), 400);
             }
 
-            document.addEventListener('click', function (e) {
+            document.addEventListener('click', function(e) {
                 const target = e.target.closest('.btn-login, .password-toggle');
                 if (!target) return;
 
@@ -826,4 +813,5 @@
         });
     </script>
 </body>
+
 </html>

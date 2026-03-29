@@ -15,42 +15,42 @@
 @endsection
 
 @section('content')
-<div class="container-fluid py-4">
-    <div class="card border-0 shadow-sm">
-        <div class="card-body p-3 p-md-4">
-            <div class="table-responsive">
-                <table class="table table-bordered align-middle mb-0">
-                    <tr>
-                        <th style="width: 280px;">UUID Data</th>
-                        <td>{{ $profiling->id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Nama Kapal</th>
-                        <td>{{ $profiling->nama_kapal }}</td>
-                    </tr>
-                    <tr>
-                        <th>Asal Keberangkatan</th>
-                        <td>{{ $profiling->asal_keberangkatan }}</td>
-                    </tr>
-                    <tr>
-                        <th>Tujuan Keberangkatan</th>
-                        <td>{{ $profiling->tujuan_keberangkatan }}</td>
-                    </tr>
-                    <tr>
-                        <th>Waktu Keberangkatan</th>
-                        <td>{{ \Carbon\Carbon::parse($profiling->waktu_keberangkatan)->format('d-m-Y H:i') }}</td>
-                    </tr>
-                    <tr>
-                        <th>Kapasitas Penumpang</th>
-                        <td>{{ $profiling->kapasitas_penumpang }}</td>
-                    </tr>
-                    <tr>
-                        <th>UUID User</th>
-                        <td>{{ $profiling->user_id }}</td>
-                    </tr>
-                </table>
+    <div class="container-fluid py-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-3 p-md-4">
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle mb-0">
+                        <tr>
+                            <th style="width: 280px;">UUID Data</th>
+                            <td>{{ $profiling->id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Nama Kapal</th>
+                            <td>{{ $profiling->nama_kapal }}</td>
+                        </tr>
+                        <tr>
+                            <th>Asal Keberangkatan</th>
+                            <td>{{ $profiling->asal_keberangkatan }}</td>
+                        </tr>
+                        <tr>
+                            <th>Tujuan Keberangkatan</th>
+                            <td>{{ $profiling->tujuan_keberangkatan }}</td>
+                        </tr>
+                        <tr>
+                            <th>Waktu Keberangkatan</th>
+                            <td>{{ \Carbon\Carbon::parse($profiling->waktu_keberangkatan)->format('d-m-Y H:i') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Kapasitas Penumpang</th>
+                            <td>{{ $profiling->kapasitas_penumpang }}</td>
+                        </tr>
+                        <tr>
+                            <th>UUID User</th>
+                            <td>{{ $profiling->user_id }}</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection

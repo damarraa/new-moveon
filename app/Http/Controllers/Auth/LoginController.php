@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+// use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    use AuthenticatesUsers;
+    // use AuthenticatesUsers;
 
     protected $redirectTo = '/home';
 
@@ -26,6 +27,20 @@ class LoginController extends Controller
     public function username()
     {
         return 'login';
+    }
+
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+        $credentials = $this->credentials($request);
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->intended($this->redirectTo);
+        }
+
+        return back()->withErrors([
+            'login' => 'Email/Nomor Telepon atau Password yang Anda masukkan salah.',
+        ])->onlyInput('login');
     }
 
     protected function validateLogin(Request $request)
@@ -48,5 +63,14 @@ class LoginController extends Controller
             $field => $login,
             'password' => $request->input('password'),
         ];
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }

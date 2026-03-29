@@ -56,9 +56,37 @@
 </head>
 
 <body class="text-slate-800 antialiased" x-data="{
+    dataKapalAsli: {{ isset($kapals) ? json_encode($kapals) : '[]' }},
+    searchKapal: '',
+    openDropdownKapal: false,
+    selectedNamaKapal: '',
+
+    // Filter Kapal Pelayaran (Selain 4 Kapal Roro)
+    get kapalPelayaran() {
+        const roro = ['KMP Lome', 'KMP Tirus Meranti', 'KMP Wira Loewisa', 'KMP Teluk Singkil'];
+        return this.dataKapalAsli.filter(k => !roro.includes(k.nama_kapal));
+    },
+
+    // Filter Kapal Penyeberangan (Hanya 4 Kapal Roro)
+    get kapalPenyeberangan() {
+        const roro = ['KMP Lome', 'KMP Tirus Meranti', 'KMP Wira Loewisa', 'KMP Teluk Singkil'];
+        return this.dataKapalAsli.filter(k => roro.includes(k.nama_kapal));
+    },
+
+    // Live Search Filter untuk Dropdown Pelayaran
+    get filteredKapalPelayaran() {
+        if (this.searchKapal === '') return this.kapalPelayaran;
+        const q = this.searchKapal.toLowerCase();
+        return this.kapalPelayaran.filter(k =>
+            k.nama_kapal.toLowerCase().includes(q) ||
+            k.asal_keberangkatan.toLowerCase().includes(q) ||
+            k.tujuan_keberangkatan.toLowerCase().includes(q)
+        );
+    },
+
     perjalanan: {
         jenisLayanan: 'pelayaran',
-        kapal: '',
+        profiling_id: '',
         asal: '',
         tujuan: '',
         tanggalBerangkat: '',
@@ -89,6 +117,15 @@
             age--;
         }
         return age >= 0 && age <= 2;
+    },
+    pilihKapal() {
+        if (this.perjalanan.profiling_id) {
+            let kapalTerpilih = this.dataKapalAsli.find(k => k.id == this.perjalanan.profiling_id);
+            if (kapalTerpilih) {
+                this.perjalanan.asal = kapalTerpilih.asal_keberangkatan;
+                this.perjalanan.tujuan = kapalTerpilih.tujuan_keberangkatan;
+            }
+        }
     }
 }">
 
@@ -129,7 +166,8 @@
             </div>
         </div>
 
-        <form action="#" method="POST" class="space-y-6">
+        <form action="{{ route('guest.manifest.store') ?? '#' }}" method="POST" class="space-y-6">
+            @csrf
 
             <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-8">
 
@@ -143,8 +181,9 @@
                             class="text-red-500">*</span></label>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <label class="cursor-pointer relative">
-                            <input type="radio" x-model="perjalanan.jenisLayanan" value="pelayaran"
-                                @change="perjalanan.kapal = ''; perjalanan.bawaKendaraan = 'Tidak'"
+                            <input type="radio" name="jenis_layanan" x-model="perjalanan.jenisLayanan"
+                                value="pelayaran"
+                                @change="perjalanan.profiling_id = ''; selectedNamaKapal = ''; perjalanan.asal = ''; perjalanan.tujuan = ''; perjalanan.bawaKendaraan = 'Tidak'"
                                 class="radio-card-input absolute opacity-0 w-0 h-0">
                             <div
                                 class="radio-card-body p-4 border-2 border-slate-200 rounded-xl hover:border-brand-softblue transition-all flex items-center gap-4">
@@ -166,8 +205,10 @@
                         </label>
 
                         <label class="cursor-pointer relative">
-                            <input type="radio" x-model="perjalanan.jenisLayanan" value="penyeberangan"
-                                @change="perjalanan.kapal = ''" class="radio-card-input absolute opacity-0 w-0 h-0">
+                            <input type="radio" name="jenis_layanan" x-model="perjalanan.jenisLayanan"
+                                value="penyeberangan"
+                                @change="perjalanan.profiling_id = ''; perjalanan.asal = ''; perjalanan.tujuan = ''"
+                                class="radio-card-input absolute opacity-0 w-0 h-0">
                             <div
                                 class="radio-card-body p-4 border-2 border-slate-200 rounded-xl hover:border-brand-softblue transition-all flex items-center gap-4">
                                 <div
@@ -191,55 +232,125 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
-                    <div class="sm:col-span-2">
+                    <div class="sm:col-span-2 relative">
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Kapal <span
                                 class="text-red-500">*</span></label>
 
-                        <input x-show="perjalanan.jenisLayanan === 'pelayaran'" type="text"
-                            x-model="perjalanan.kapal" :required="perjalanan.jenisLayanan === 'pelayaran'"
-                            placeholder="Contoh: KM Kelud"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-navy outline-none transition-all text-slate-700">
+                        <input type="hidden" name="profiling_id" :value="perjalanan.profiling_id">
 
-                        <select x-cloak x-show="perjalanan.jenisLayanan === 'penyeberangan'" x-model="perjalanan.kapal"
+                        <div x-show="perjalanan.jenisLayanan === 'pelayaran'" class="relative">
+                            <div @click="openDropdownKapal = !openDropdownKapal"
+                                @click.away="openDropdownKapal = false"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white flex justify-between items-center cursor-pointer focus-within:ring-2 focus-within:ring-brand-navy transition-all">
+                                <span x-text="selectedNamaKapal || '— Cari & Pilih Kapal Pelayaran —'"
+                                    :class="selectedNamaKapal ? 'text-slate-800 font-medium' : 'text-slate-500'"></span>
+                                <svg class="w-5 h-5 text-slate-400 transition-transform"
+                                    :class="openDropdownKapal ? 'rotate-180' : ''" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+
+                            <div x-cloak x-show="openDropdownKapal" x-transition
+                                class="absolute z-20 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-72 flex flex-col overflow-hidden">
+
+                                <div class="p-3 bg-slate-50 border-b border-slate-100 sticky top-0">
+                                    <div class="relative">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                            </svg>
+                                        </div>
+                                        <input type="text" x-model="searchKapal"
+                                            placeholder="Ketik nama kapal atau rute..."
+                                            class="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:border-brand-softblue focus:ring-1 focus:ring-brand-softblue text-sm bg-white">
+                                    </div>
+                                </div>
+
+                                <ul class="overflow-y-auto p-2 flex-grow scroll-smooth">
+                                    <template x-for="kapal in filteredKapalPelayaran" :key="kapal.id">
+                                        <li @click="perjalanan.profiling_id = kapal.id; selectedNamaKapal = kapal.nama_kapal + ' (' + kapal.asal_keberangkatan + ' ➔ ' + kapal.tujuan_keberangkatan + ')'; openDropdownKapal = false; pilihKapal()"
+                                            class="px-3 py-3 hover:bg-brand-softblue/10 cursor-pointer rounded-lg transition-colors border-b border-slate-50 last:border-0">
+                                            <div class="font-bold text-brand-navy text-sm" x-text="kapal.nama_kapal">
+                                            </div>
+                                            <div class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                                    </path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                </svg>
+                                                <span
+                                                    x-text="kapal.asal_keberangkatan + ' ➔ ' + kapal.tujuan_keberangkatan"></span>
+                                            </div>
+                                        </li>
+                                    </template>
+                                    <li x-show="filteredKapalPelayaran.length === 0"
+                                        class="px-3 py-6 text-center text-sm text-slate-500">
+                                        Tidak ada kapal yang cocok dengan pencarian Anda.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <select x-cloak x-show="perjalanan.jenisLayanan === 'penyeberangan'"
+                            x-model="perjalanan.profiling_id" @change="pilihKapal()"
                             :required="perjalanan.jenisLayanan === 'penyeberangan'"
                             class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-navy outline-none transition-all text-slate-700 bg-white cursor-pointer">
                             <option value="" disabled selected>— Pilih Kapal Penyeberangan —</option>
-                            <option value="KMP Lome">KMP Lome</option>
-                            <option value="KMP Tirus Meranti">KMP Tirus Meranti</option>
-                            <option value="KMP Wira Loewisa">KMP Wira Loewisa</option>
-                            <option value="KMP Teluk Singkil">KMP Teluk Singkil</option>
+                            <template x-for="kapal in kapalPenyeberangan" :key="kapal.id">
+                                <option :value="kapal.id" x-text="kapal.nama_kapal"></option>
+                            </template>
+                            <option x-show="kapalPenyeberangan.length === 0" value="" disabled>Belum ada KMP
+                                Roro terdaftar.</option>
                         </select>
                     </div>
 
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Pelabuhan Asal <span
                                 class="text-red-500">*</span></label>
-                        <input type="text" x-model="perjalanan.asal" placeholder="Asal..." required
+                        <input type="text" name="asal" x-model="perjalanan.asal"
+                            :readonly="perjalanan.asal !== ''"
+                            :class="perjalanan.asal !== '' ? 'bg-slate-100 cursor-not-allowed text-slate-500' :
+                                'bg-white'"
+                            placeholder="Asal..." required
                             class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-navy outline-none transition-all">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Pelabuhan Tujuan <span
                                 class="text-red-500">*</span></label>
-                        <input type="text" x-model="perjalanan.tujuan" placeholder="Tujuan..." required
+                        <input type="text" name="tujuan" x-model="perjalanan.tujuan"
+                            :readonly="perjalanan.tujuan !== ''"
+                            :class="perjalanan.tujuan !== '' ? 'bg-slate-100 cursor-not-allowed text-slate-500' :
+                                'bg-white'"
+                            placeholder="Tujuan..." required
                             class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-navy outline-none transition-all">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Tanggal Keberangkatan <span
                                 class="text-red-500">*</span></label>
-                        <input type="date" x-model="perjalanan.tanggalBerangkat" required
+                        <input type="date" name="tanggal_berangkat" x-model="perjalanan.tanggalBerangkat" required
                             class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-navy outline-none transition-all">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Jam Keberangkatan <span
                                 class="text-red-500">*</span></label>
-                        <input type="time" x-model="perjalanan.jamBerangkat" required
+                        <input type="time" name="jam_berangkat" x-model="perjalanan.jamBerangkat" required
                             class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-navy outline-none transition-all">
                     </div>
 
                     <div class="sm:col-span-2">
                         <label class="block text-sm font-semibold text-slate-700 mb-1">No. WhatsApp Perwakilan
                             (Penerima E-Ticket) <span class="text-red-500">*</span></label>
-                        <input type="tel" x-model="perjalanan.telepon" placeholder="Contoh: 08123456789" required
+                        <input type="tel" name="telepon" x-model="perjalanan.telepon"
+                            placeholder="Contoh: 08123456789" required
                             class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-green-500 outline-none transition-all text-slate-700 bg-green-50/30">
                     </div>
 
@@ -251,14 +362,14 @@
                         <div class="flex gap-4 mb-6">
                             <label
                                 class="flex items-center gap-2 cursor-pointer bg-slate-50 px-4 py-2 border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors">
-                                <input type="radio" x-model="perjalanan.bawaKendaraan" value="Tidak"
-                                    class="w-4 h-4 text-brand-softblue focus:ring-brand-softblue">
+                                <input type="radio" name="bawa_kendaraan" x-model="perjalanan.bawaKendaraan"
+                                    value="Tidak" class="w-4 h-4 text-brand-softblue focus:ring-brand-softblue">
                                 <span class="text-sm font-medium text-slate-700">Tidak (Penumpang Pejalan Kaki)</span>
                             </label>
                             <label
                                 class="flex items-center gap-2 cursor-pointer bg-brand-softblue/10 px-4 py-2 border border-brand-softblue/30 rounded-lg hover:bg-brand-softblue/20 transition-colors">
-                                <input type="radio" x-model="perjalanan.bawaKendaraan" value="Ya"
-                                    class="w-4 h-4 text-brand-softblue focus:ring-brand-softblue">
+                                <input type="radio" name="bawa_kendaraan" x-model="perjalanan.bawaKendaraan"
+                                    value="Ya" class="w-4 h-4 text-brand-softblue focus:ring-brand-softblue">
                                 <span class="text-sm font-medium text-brand-navy">Ya, Bawa Kendaraan</span>
                             </label>
                         </div>
@@ -272,7 +383,7 @@
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-semibold text-slate-700 mb-1">Jenis / Golongan
                                     Kendaraan <span class="text-red-500">*</span></label>
-                                <select x-model="perjalanan.jenisKendaraan"
+                                <select name="jenis_kendaraan" x-model="perjalanan.jenisKendaraan"
                                     :required="perjalanan.jenisLayanan === 'penyeberangan' && perjalanan
                                         .bawaKendaraan === 'Ya'"
                                     class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-softblue outline-none transition-all text-slate-700 bg-white cursor-pointer text-sm">
@@ -296,7 +407,7 @@
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-semibold text-slate-700 mb-1">Nomor Polisi Kendaraan
                                     <span class="text-red-500">*</span></label>
-                                <input type="text" x-model="perjalanan.platNomor"
+                                <input type="text" name="plat_nomor" x-model="perjalanan.platNomor"
                                     :required="perjalanan.jenisLayanan === 'penyeberangan' && perjalanan
                                         .bawaKendaraan === 'Ya'"
                                     placeholder="Contoh: BM 1234 ABC"
@@ -343,8 +454,9 @@
                                 <div class="lg:col-span-1">
                                     <label class="block text-xs font-semibold text-slate-600 mb-1">NIK <span
                                             class="text-red-500">*</span></label>
-                                    <input type="number" x-model="penumpang.nik" placeholder="16 Digit NIK" required
-                                        class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-navy outline-none transition-all text-sm">
+                                    <input type="number" :name="'penumpangs[' + index + '][nik]'"
+                                        x-model="penumpang.nik" placeholder="16 Digit NIK" required
+                                        class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-navy outline-none transition-all text-sm text-slate-700">
                                 </div>
 
                                 <div class="lg:col-span-1">
@@ -354,15 +466,17 @@
                                         <span x-show="cekAnak(penumpang.tanggalLahir)" x-transition
                                             class="bg-brand-orange text-white text-[9px] uppercase font-bold px-1.5 py-0.5 rounded tracking-wide animate-pulse">Anak</span>
                                     </label>
-                                    <input type="text" x-model="penumpang.nama" placeholder="Sesuai KTP" required
-                                        class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-navy outline-none transition-all text-sm">
+                                    <input type="text" :name="'penumpangs[' + index + '][nama]'"
+                                        x-model="penumpang.nama" placeholder="Sesuai KTP" required
+                                        class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-navy outline-none transition-all text-sm text-slate-700">
                                 </div>
 
                                 <div class="lg:col-span-1">
                                     <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal Lahir <span
                                             class="text-red-500">*</span></label>
-                                    <input type="date" x-model="penumpang.tanggalLahir" required
-                                        class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-navy outline-none transition-all text-sm">
+                                    <input type="date" :name="'penumpangs[' + index + '][tanggal_lahir]'"
+                                        x-model="penumpang.tanggalLahir" required
+                                        class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-navy outline-none transition-all text-sm text-slate-700">
                                 </div>
                             </div>
                         </div>
@@ -380,7 +494,7 @@
             </div>
 
             <div class="pt-4">
-                <button type="button"
+                <button type="submit"
                     class="w-full py-4 bg-brand-navy hover:bg-blue-900 text-white font-bold text-lg rounded-xl shadow-lg shadow-brand-navy/30 transition-all flex justify-center items-center gap-2">
                     <span>Proses Check-In & Kirim E-Ticket</span>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

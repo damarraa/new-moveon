@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\GuestManifestController;
 use App\Http\Controllers\Operator\ManifestController;
 use App\Http\Controllers\Operator\PelaporanKapalController;
 use App\Http\Controllers\Operator\ProfilingController;
@@ -20,21 +21,18 @@ Route::get('/', function () {
 })->name('welcome');
 
 // ==================== MANIFEST PUBLIK ====================
-Route::get('/manifest-pelayaran', function () {
-    return view('Beranda.manifest-pelayaran');
-})->name('manifest.pelayaran');
-
-Route::get('/manifest-penyeberangan', function () {
-    return view('Beranda.manifest-penyeberangan');
-})->name('manifest.penyeberangan');
-
+// Route::get('/checkin-manifest', function () {
+//     return view('checkin-manifest');
+// });
+Route::get('/checkin-manifest', [GuestManifestController::class, 'create'])->name('guest.manifest.create');
+Route::post('/checkin-manifest', [GuestManifestController::class, 'store'])->name('guest.manifest.store');
 
 // ==================== AUTH GUEST ====================
 Route::middleware('guest')->group(function () {
 
     // Login
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+    Route::post('/login', [LoginController::class, 'login']);
 
     // Forgot Password
     Route::get('/forgot-password', function () {
@@ -55,7 +53,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/register/internal', [RegisterController::class, 'registerInternal'])->name('register.internal.store');
 });
 
-
 // ==================== AUTH USER ====================
 Route::middleware('auth')->group(function () {
 
@@ -72,7 +69,4 @@ Route::middleware('auth')->group(function () {
         Route::resource('manifest', ManifestController::class);
         Route::resource('pelaporan-kapal', PelaporanKapalController::class);
     });
-
-
- 
 });

@@ -61,7 +61,8 @@
         class="fixed w-full top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm py-3 transition-all duration-300 border-b border-slate-200">
         <div class="container mx-auto px-6 lg:px-12 flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <img src="{{ asset('assets/logo/jasaraharja.png') }}" alt="Jasa Raharja" class="h-8 lg:h-10 object-contain">
+                <img src="{{ asset('assets/logo/jasaraharja.png') }}" alt="Jasa Raharja"
+                    class="h-8 lg:h-10 object-contain">
                 <div class="h-8 w-px bg-slate-300 hidden sm:block"></div>
                 <img src="{{ asset('assets/logo/logo.png') }}" alt="MOVEON"
                     class="h-10 lg:h-12 object-contain hidden sm:block">
@@ -81,7 +82,7 @@
                     Contact
                 </a>
 
-          
+
                 <a href="/login"
                     class="bg-brand-navy text-white hover:bg-blue-900 px-6 py-2.5 rounded-full font-medium transition-all shadow-md hover:shadow-lg flex items-center gap-2 ml-2">
                     Login
@@ -90,13 +91,8 @@
         </div>
     </nav>
 
-            @if(session('success'))
-        <div 
-            x-data="{ show: true }" 
-            x-show="show"
-            x-transition
-            class="fixed top-20 right-5 z-50 max-w-sm w-full"
-        >
+    @if (session('success'))
+        <div x-data="{ show: true }" x-show="show" x-transition class="fixed top-20 right-5 z-50 max-w-sm w-full">
             <div class="bg-green-500 text-white px-5 py-4 rounded-xl shadow-lg flex items-start gap-3">
                 <div class="text-xl">✅</div>
                 <div class="flex-1">
@@ -114,7 +110,7 @@
                 document.querySelector('[x-data]')?.__x?.$data.show = false
             }, 4000)
         </script>
-        @endif
+    @endif
 
     <section class="relative pt-40 pb-32 lg:pt-48 lg:pb-40 overflow-hidden bg-slate-50">
         <div id="map-bg" class="absolute inset-0 z-0 opacity-75 mix-blend-multiply"></div>
@@ -153,8 +149,8 @@
                         class="px-8 py-3.5 bg-white hover:bg-slate-100 text-brand-navy border border-slate-300 font-bold rounded-full shadow-md transition-all flex items-center justify-center gap-3 w-full sm:w-auto">
                         Pendaftaran Operator
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4v16m8-8H4"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
+                            </path>
                         </svg>
                     </a>
                 </div>
@@ -175,7 +171,8 @@
                     <p class="text-brand-orange text-sm font-semibold uppercase tracking-[0.2em] mb-2">Akses Cepat</p>
                     <h2 class="text-2xl lg:text-3xl font-bold font-poppins mb-2">Pendaftaran Operator</h2>
                     <p class="text-slate-200 text-sm lg:text-base leading-relaxed">
-                        Daftarkan operator baru ke dalam sistem untuk kebutuhan pengelolaan operasional dan akses portal secara terstruktur.
+                        Daftarkan operator baru ke dalam sistem untuk kebutuhan pengelolaan operasional dan akses portal
+                        secara terstruktur.
                     </p>
                 </div>
                 <div class="w-full lg:w-auto">
@@ -183,8 +180,8 @@
                         class="inline-flex w-full lg:w-auto items-center justify-center gap-3 px-7 py-3.5 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-orange/30 transition-all">
                         Buka Halaman Pendaftaran Operator
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 5l7 7-7 7"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
                         </svg>
                     </a>
                 </div>
@@ -355,7 +352,7 @@
                     </div>
                     <h3 class="font-bold text-brand-navy mb-2">WhatsApp Center</h3>
                     <p class="text-sm text-slate-600 mb-4">Senin - Jumat (08:00 - 17:00)</p>
-                    <a href="https://wa.me/6281234567890" target="_blank"
+                    <a href="#" target="_blank"
                         class="text-green-600 font-semibold hover:text-green-700">Chat Sekarang &rarr;</a>
                 </div>
 
@@ -371,7 +368,7 @@
                     </div>
                     <h3 class="font-bold text-brand-navy mb-2">Email Support</h3>
                     <p class="text-sm text-slate-600 mb-4">Dukungan teknis 24/7</p>
-                    <a href="mailto:support.riau@jasaraharja.co.id"
+                    <a href="#"
                         class="text-brand-orange font-semibold hover:text-orange-600">Kirim Email &rarr;</a>
                 </div>
             </div>
@@ -393,6 +390,101 @@
             </div>
         </div>
     </footer>
+
+    <div x-data="{
+        openChat: false,
+        message: '',
+        messages: [
+            { role: 'bot', text: 'Halo! Selamat datang di MOVEON. Ada yang bisa kami bantu terkait pendaftaran agen atau check-in manifest?' }
+        ],
+        sendMessage() {
+            if (this.message.trim() !== '') {
+                // Tambah pesan user
+                this.messages.push({ role: 'user', text: this.message });
+                this.message = '';
+    
+                // Scroll ke bawah (simple mockup)
+                let chatBox = document.getElementById('chat-messages');
+                setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 100);
+    
+                // Mockup balasan bot setelah 1 detik
+                setTimeout(() => {
+                    this.messages.push({ role: 'bot', text: 'Mohon maaf, sistem Live Chat saat ini masih dalam tahap integrasi. Silakan hubungi WhatsApp Center kami untuk bantuan instan.' });
+                    setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 100);
+                }, 1000);
+            }
+        }
+    }" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+
+        <div x-show="openChat" x-transition:enter="transition ease-out duration-300 transform origin-bottom-right"
+            x-transition:enter-start="opacity-0 scale-50" x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-200 transform origin-bottom-right"
+            x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-50" x-cloak
+            class="bg-white w-[320px] sm:w-[360px] h-[450px] rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col mb-4">
+
+            <div class="bg-brand-navy px-4 py-4 flex justify-between items-center text-white shadow-md relative z-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center p-1">
+                        <img src="{{ asset('assets/logo/logo.png') }}" alt="Bot"
+                            class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm font-poppins">MOVEON Assistant</h4>
+                        <div class="flex items-center gap-1.5 mt-0.5">
+                            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                            <p class="text-[10px] text-blue-200 font-medium tracking-wide uppercase">Online Support</p>
+                        </div>
+                    </div>
+                </div>
+                <button @click="openChat = false"
+                    class="text-white/70 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-slate-50 flex flex-col gap-4">
+                <template x-for="(msg, index) in messages" :key="index">
+                    <div :class="msg.role === 'bot' ? 'self-start' : 'self-end'" class="max-w-[85%]">
+                        <div :class="msg.role === 'bot' ? 'bg-white border border-slate-200 text-slate-700 rounded-br-2xl' :
+                            'bg-brand-softblue text-white rounded-bl-2xl'"
+                            class="px-4 py-2.5 rounded-t-2xl text-sm shadow-sm inline-block leading-relaxed"
+                            x-text="msg.text">
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="p-3 bg-white border-t border-slate-100 flex gap-2 items-center">
+                <input type="text" x-model="message" @keydown.enter="sendMessage()" placeholder="Ketik pesan..."
+                    class="flex-1 px-4 py-2.5 rounded-full border border-slate-300 focus:outline-none focus:border-brand-softblue focus:ring-1 focus:ring-brand-softblue text-sm transition-all bg-slate-50 focus:bg-white">
+                <button @click="sendMessage()"
+                    class="w-10 h-10 bg-brand-orange hover:bg-orange-600 text-white rounded-full flex items-center justify-center shadow-md transition-colors shrink-0">
+                    <svg class="w-4 h-4 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <button @click="openChat = !openChat"
+            class="w-16 h-16 bg-brand-navy hover:bg-blue-900 text-white rounded-full shadow-2xl shadow-brand-navy/50 flex items-center justify-center transition-all transform hover:scale-105 active:scale-95 group border-2 border-white/20">
+            <svg x-show="!openChat" class="w-7 h-7 group-hover:animate-bounce" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z">
+                </path>
+            </svg>
+            <svg x-show="openChat" x-cloak class="w-7 h-7" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                </path>
+            </svg>
+        </button>
+    </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
