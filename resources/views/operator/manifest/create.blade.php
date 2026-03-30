@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
 @section('page_title', 'Tambah Manifest')
+@section('breadcrumb', 'Tambah Manifest')
 
 @section('content')
-<div class="card p-4">
-    <h1>Tambah Manifest</h1>
-    <p>Form tambah manifest akan ditampilkan di sini.</p>
-</div>
+<form action="{{ route('operator.manifest.store') }}" method="POST" id="manifestForm">
+    @csrf
+    @include('operator.manifest.partials.form', ['submitLabel' => 'Simpan Manifest'])
+</form>
 @endsection

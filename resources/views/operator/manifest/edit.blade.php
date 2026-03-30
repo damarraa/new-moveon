@@ -1,10 +1,12 @@
 @extends('layouts.app')
 
 @section('page_title', 'Edit Manifest')
+@section('breadcrumb', 'Edit Manifest')
 
 @section('content')
-<div class="card p-4">
-    <h1>Edit Manifest #{{ $id ?? '-' }}</h1>
-    <p>Form edit manifest akan ditampilkan di sini.</p>
-</div>
+<form action="{{ route('operator.manifest.update', $manifest->id) }}" method="POST" id="manifestForm">
+    @csrf
+    @method('PUT')
+    @include('operator.manifest.partials.form', ['submitLabel' => 'Update Manifest'])
+</form>
 @endsection

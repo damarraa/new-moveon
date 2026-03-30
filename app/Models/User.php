@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use App\Models\Profiling;
+use App\Models\PelaporanKapal;
+use App\Models\CheckinManifest;
 
 class User extends Authenticatable
 {
@@ -63,8 +65,13 @@ class User extends Authenticatable
         return $this->hasMany(Profiling::class, 'user_id', 'id');
     }
     
-        public function pelaporanKapals()
+    public function pelaporanKapals()
     {
         return $this->hasMany(PelaporanKapal::class);
+    }
+
+    public function checkinManifests()
+    {
+        return $this->hasMany(CheckinManifest::class, 'user_id', 'id');
     }
 }

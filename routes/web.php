@@ -26,6 +26,8 @@ Route::get('/', function () {
 // });
 Route::get('/checkin-manifest', [GuestManifestController::class, 'create'])->name('guest.manifest.create');
 Route::post('/checkin-manifest', [GuestManifestController::class, 'store'])->name('guest.manifest.store');
+Route::get('/checkin-manifest/ticket/{id}', [GuestManifestController::class, 'downloadTicket'])->name('guest.manifest.ticket');
+
 
 // ==================== AUTH GUEST ====================
 Route::middleware('guest')->group(function () {
